@@ -25,7 +25,6 @@ details VARCHAR(5024),#产品详细说明
 shelf_time BIGINT,#上架时间
 sold_count INT,#已售出的数量
 is_onsale BOOLEAN #是否促销中
-
 );
 #插入数据
 INSERT INTO user VALUES(NULL,);
