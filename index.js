@@ -28,7 +28,7 @@ const server=express();
 
 // 将cors作为Server的中间件
 server.use(cors({
-    origin:["http://localhost:8081","http://127.0.0.1:8081"]
+    origin:["http://localhost:8080","http://127.0.0.1:8080"]
 }));
 
 //将body-parser作为Server的中间件 
@@ -37,13 +37,35 @@ server.use(bodyParser.urlencoded({extended:false}));
 // 获取用户订单信息
 server.get("/order",(req,res)=>{
     // let oid=req.query.id;
+    // console.log(oid);
     // 根据id获取订单编号，订单状态，下单时间，发货时间，送达时间
     // 目前写成死的，改了删此条
-    let sql="SELECT order_number,status,pay_time,deliver_time,received_time FROM tb_order_user WHERE id=?";
-    pool.query(sql,[1],(error,results)=>{
+    let sql="SELECT order_number,status,pay_time,deliver_time,received_time FROM tb_order_user";
+    pool.query(sql,(error,results)=>{
+        if(error) throw error;
+        res.send({message:"获取成功",code:1,results:results})
+        console.log(results)
+    })
+})
+
+// 获取首页轮播图片
+// 获取专区名称，专区插图
+server.get("/",(req,res)=>{
+    let sql="SELECT index_carousel_url,onSale_time,index_onSale_url FROM tb_index_product";
+    pool.query(sql,(error,results)=>{
         if(error) throw error;
         res.send({message:"获取成功",code:1,results:results})
     })
 })
+//获取商品信息的接口
+// server.get('/products',(req,res)=>{
+//     //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+//     let sql = 'SELECT id,pro_name,pro_title,pro_price,pro_imgs_url,pro_desc FROM tb_products';
+//     pool.query(sql,(error,results)=>{
+//         if(error) throw error;
+//         res.send({message:'查询成功',code:1,results:results})
+//         console.log(results);
+//     });
+// });
 // 创建端口
 server.listen(3000);
