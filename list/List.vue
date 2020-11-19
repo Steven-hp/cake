@@ -38,75 +38,15 @@
     <!-- 商品列表 -->
     <div class="listPro">
       <!-- 单个商品 -->
-      <div class="proListSu">
+      <div class="proListSu" v-for="(product, index) of products" :key="index">
         <!-- 图片 -->
-        <a href="">
-          <img src="../assets/list/1.jpg" alt="" />
+        <a href="" v-if="product.pro_imgs_url !=null">
+          <img :src = "product.pro_imgs_url" />
         </a>
         <!-- 名称 -->
-        <h3>橘与桔</h3>
+        <h3>{{ product.pro_name }}</h3>
         <!-- 价格 -->
-        <span>¥198.00/454g(1.0磅)</span>
-        <!-- 推荐 -->
-        <div class="labelEntrance">
-          <a href="">新品 &gt;</a><a href="">当季推荐 &gt;</a>
-        </div>
-        <!-- 加入购物车 -->
-        <a href="" name="pro-list-addcart_1412" class="proListAddcart"
-          ><i></i>加入购物车</a
-        >
-      </div>
-
-      <!-- 单个商品 -->
-      <div class="proListSu">
-        <!-- 图片 -->
-        <a href="">
-          <img src="../assets/list/1.jpg" alt="" />
-        </a>
-        <!-- 名称 -->
-        <h3>橘与桔</h3>
-        <!-- 价格 -->
-        <span>¥198.00/454g(1.0磅)</span>
-        <!-- 推荐 -->
-        <div class="labelEntrance">
-          <a href="">新品 &gt;</a><a href="">当季推荐 &gt;</a>
-        </div>
-        <!-- 加入购物车 -->
-        <a href="" name="pro-list-addcart_1412" class="proListAddcart"
-          ><i></i>加入购物车</a
-        >
-      </div>
-
-      <!-- 单个商品 -->
-      <div class="proListSu">
-        <!-- 图片 -->
-        <a href="">
-          <img src="../assets/list/1.jpg" alt="" />
-        </a>
-        <!-- 名称 -->
-        <h3>橘与桔</h3>
-        <!-- 价格 -->
-        <span>¥198.00/454g(1.0磅)</span>
-        <!-- 推荐 -->
-        <div class="labelEntrance">
-          <a href="">新品 &gt;</a><a href="">当季推荐 &gt;</a>
-        </div>
-        <!-- 加入购物车 -->
-        <a href="" name="pro-list-addcart_1412" class="proListAddcart"
-          ><i></i>加入购物车</a
-        >
-      </div>
-
-      <!-- 单个商品 -->
-      <div class="proListSu">
-        <!-- 图片 -->
-        <a href="">
-          <img src="../assets/list/1.jpg" alt="" />
-        </a>
-        <!-- 名称 -->
-        <h3>橘与桔</h3>
-        <!-- 价格 -->
-        <span>¥198.00/454g(1.0磅)</span>
+        <span>¥{{ product.pro_price }}/454g(1.0磅)</span>
         <!-- 推荐 -->
         <div class="labelEntrance">
           <a href="">新品 &gt;</a><a href="">当季推荐 &gt;</a>
@@ -198,5 +138,40 @@ dl {
 }
 .listPro {
   display: flex;
+  flex-wrap: wrap;
 }
 </style>
+<script>
+export default {
+  data() {
+    return {
+      //存储服务器返回商品信息的分类数据
+      products: [],
+    };
+  },
+  mounted() {
+    //修改busy变量的值
+      this.busy=false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+       this.axios.get("/products").then((res)=>{
+      //获取服务器返回的数据 -- 数组
+        let data = res.data.results;
+        //数组的遍历,此时的item代表的是组成数组的每一个object
+        //每一个object都包含id,subject,description及image属性
+        data.forEach((item) => {
+          //在文章的图片不为空的情况下才动态加载
+          if (item.pro_imgs_url != null) {
+            //属性重新赋值
+            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
+          }
+          //现在在无论是否图片为空都添加到以articles数组中了
+          this.products.push(item);
+        });
+        //关闭加载提示框
+        //this.$indicator.close();
+        //修改busy变量的值
+        this.busy = false;
+      }) 
+  }
+};
+</script>
