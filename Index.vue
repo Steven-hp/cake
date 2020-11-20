@@ -30,13 +30,13 @@
         </div>
         <!-- 商品展示 -->
         <div class="products_width">
-          <div class="index_products" v-for="item in 4" :key="item">
+          <div class="index_products" v-for="(item1,index1) of products" :key="index1">
             <div>
               <router-link to="#">
-              <img src="../assets/products/8e5930873714d422476417759b01e4b8.png" alt="">
+              <img :src="item1.pro_imgs_url" alt="">
               <!-- 商品名称和商品描述 -->
-              <p>蔓声</p>
-              <p>树莓奶油与浆果慕斯蛋糕</p>
+              <p>{{item1.pro_name}}</p>
+              <p>{{item1.pro_desc}}</p>
               </router-link>
             <!-- 商品标签 -->
             <div class="tag_list">
@@ -44,7 +44,7 @@
             </div>
               <div class="index_price">
                 <!-- 商品价格 -->
-                <div>¥198.00/454g(1.0磅)</div>
+                <div>{{item1.pro_price}}</div>
                 <router-link to="a">加入购物车</router-link>
               </div>
             </div>
@@ -53,6 +53,14 @@
         <!-- 商品展示结束 -->
       </div>
     <!-- 展示楼层结束 -->
+    <!-- 活动专区开始 -->
+      <div class="index_activity">
+        <span class="index_word1">活动门</span><span class="index_word2">/</span><span class="index_word2">是被吸引了吧</span>
+        <div>
+          <router-link to="#"><img src="../assets/picture/810af7fb1f079477c8aec960d11fa4df.jpg" alt=""></router-link>
+        </div>
+      </div>
+    <!-- 活动专区结束 -->
     <!-- 文章内容开始 -->
       <div class="index_article">
         <div>
@@ -89,7 +97,8 @@ export default {
   data(){
     return{
         // 轮播图数组
-      carousel:[]
+      carousel:[],
+      products:[]
     }
   },
   mounted(){
@@ -103,8 +112,15 @@ export default {
         // 推入轮播图数组
         this.carousel.push(item);
       })
-    })
-    console.log(this.carousel)
+    });
+    this.axios.get("/products").then(res=>{
+      let data=res.data.results;
+      console.log(data);
+      data.forEach(item=>{
+        item.pro_imgs_url=require("../assets/list/"+item.pro_imgs_url);
+        this.products.push(item);
+      })
+    });
   }
 }
 </script>
@@ -153,14 +169,21 @@ export default {
 }
 .index_products{
   width: 263px;
+  background-color: #fafafa;
+}
+.index_products img{
+  width: 263px;
+  height: 230px;
+  background-color: #fafafa;
 }
 .index_products a{
   text-decoration: none;
   color: #000;
 }
-.index_products img{
+/* .index_products>img{
   background-color: #fafafa;
-}
+  border: 1px dashed gray;
+} */
 /* .index_products a p{
   margin: 0;
 } */
@@ -204,10 +227,22 @@ export default {
   padding: 2px 10px;
   margin-top: 15px;
 }
-
+/* 活动部分 */
+.index_activity{
+  margin-top: 50px;
+}
+.index_activity>div{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+.index_activity img{
+  width: 542px;
+  border-radius: 8px 8px 0px 0px;
+}
 /* 底部文章部分 */
 .index_article{
-  margin-top: 50px;
+  margin: 50px 0px;
 }
 .index_article>div:first-child{
   display: flex;
@@ -221,7 +256,7 @@ export default {
 .index_articles{
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 .index_articles>div{
   width: 542px;
