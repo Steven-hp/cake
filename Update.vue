@@ -9,7 +9,7 @@
           <input
             type="text"
             name="name"
-            value="cake"
+            v-model="uname"
             placeholder="最多可输入20个字符"
           />
         </div>
@@ -22,12 +22,18 @@
         </div>
         <div>
           <label>手机：</label>
-          <span>xxxxxxxxxxx</span>
+          <!-- <span>{{phone}}</span> -->
+          <input
+            type="text"
+            name="phone"
+            v-model="phone"
+            placeholder="请输入手机号"
+          />
           <button class="info-text-button info-text-button-mobile">
             修改手机
           </button>
         </div>
-        <div>
+        <!-- <div>
           <label>邮箱：</label
           ><input
             type="text"
@@ -35,8 +41,8 @@
             placeholder="输入邮箱地址"
             value=""
           />
-        </div>
-        <div class="date">
+        </div> -->
+        <!-- <div class="date">
           <label>出生日期：</label>
           <select name="year" id="year">
             <option value="">--</option>
@@ -214,13 +220,13 @@
             <option value="31">31</option>
           </select>
           <span>日</span><span class="date-text">保存后不可更改</span>
-        </div>
+        </div> -->
         <div class="data-detail">
           <label>纪念日：</label>
           <a href="/member/date.html" class="info-text-button">去编辑</a>
         </div>
         <span class="text-span"></span>
-        <button class="info-submit" type="button">保存</button>
+        <button class="info-submit" type="button" @click="handle">保存</button>
       </div>
     </div>
   </div>
@@ -341,4 +347,27 @@
     margin: 0 17px 45px;
     display: block;
 }
-</style>>
+</style>
+<script>
+export default {
+  data(){
+    return{
+      uname:"",
+      phone:""
+    }
+  },
+  methods:{
+    handle(){
+      this.axios.post('/update','uname=' + this.uname + '&phone=' + this.phone).then(res=>{
+        let data = res.data.results;
+        console.log("aixos执行...");
+        if(res.data.code==1){
+          alert('修改成功');
+        }else{
+          alert('修改失败');
+        }
+      })
+    }
+  }
+}
+</script>
