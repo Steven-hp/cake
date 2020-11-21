@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <app-gotop></app-gotop>
     <app-footer></app-footer>
   </div>
 </template>
@@ -18,10 +19,12 @@ body{
 </style>
 <script>
 import appFooter from './components/Footer'
+import appGotop from './components/Gotop'
 export default {
   name:"app",
   components:{
-    appFooter
+    appFooter,
+    appGotop
   }
 }
 </script>
