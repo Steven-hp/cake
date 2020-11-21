@@ -3,17 +3,20 @@
     <div class="contentBox">
       <!-- 详情页图片 -->
       <div class="orterImg">
-        <img src="../assets/details/d-1.jpg" alt="" />
+        <img :src="imgurl" alt="" />
       </div>
       <!-- 详情页下方 -->
       <div class="details-content">
         <!-- 详情页左侧 -->
         <div class="details-content-left">
           <ul class="bannerImgList">
-            <li><img src="../assets/details/d-1.jpg" alt="" /></li>
-            <li><img src="../assets/details/d-1-1.jpg" alt="" /></li>
-            <li><img src="../assets/details/d-1-2.jpg" alt="" /></li>
-            <li><img src="../assets/details/d-1-3.jpg" alt="" /></li>
+            <li
+              v-for="(item, index) of imgs"
+              :key="index"
+              @mouseenter="change(item)"
+            >
+              <img :src="item" alt="" />
+            </li>
           </ul>
           <h1 class="pro-details-title">Framboise Cake 蔓生</h1>
           <div class="pro-details-label">
@@ -31,7 +34,10 @@
         <!-- 详情页右侧 -->
         <div class="details-content-right">
           <!-- 价格 -->
-          <p class="details-price">¥<span>198.00</span>/454g(1.0磅)</p>
+          <p class="details-price">
+            ¥<span @click="price">{{ price }}</span
+            >{{ showSelectSpec }}
+          </p>
           <!-- 建议 -->
           <ul class="details-options">
             <li class="details-options-size"><i></i>约12.5x12.5cm</li>
@@ -41,81 +47,51 @@
             </li>
             <li class="details-options-time"><i></i>最早今天 18:30配送</li>
           </ul>
-          <dl class="details-size-extra">
-            <dt>规格</dt>
-            <dd>
-              <ul>
-                <li>
-                  <a class="goods-1318 active">蔓生(有酒款)<i></i></a>
-                </li>
-                <li>
-                  <a data-name="蔓生(无酒款)">蔓生(无酒款)<i></i></a>
-                </li>
-              </ul>
-            </dd>
-          </dl>
-          <dl class="details-size-extra">
-            <dt>商品规格</dt>
-            <dd>
-              <ul>
-                <li>
-                  <a>454g(1.0磅)<i></i></a>
-                </li>
-                <li>
-                  <a>908g(2.0磅)<i></i></a>
-                </li>
-                <li>
-                  <a>1362g(3.0磅)<i></i></a>
-                </li>
-                <li>
-                  <a>2270g(5.0磅)<i></i></a>
-                </li>
-              </ul>
-            </dd>
-          </dl>
+          <div class="details-size-extra">
+            <div
+              class="subItem"
+              v-for="(item, index) in subItemList"
+              :key="index"
+            >
+              <div class="itemTitle">{{ item.itemTitle }}</div>
+              <div class="itemContent">
+                <ul>
+                  <li
+                    v-for="(res, resIndex) in item.itemContent"
+                    :key="res"
+                    @click="selectItem(res, index, $event, resIndex)"
+                    :class="
+                      subIndex[index] == resIndex ? 'selectActive' : 'itemLi'
+                    "
+                  >
+                    {{ res }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <!-- 购买按钮 -->
           <div class="details-button">
-            <button>立即购买</button>
-            <button>加入购物车</button>
-            <button style="display: none"><i></i>到货通知</button>
+            <button class="buttone"
+              v-for="(todo, index) in todos" :key="index" @click="addClass(index)" :class="{ buttons:index==current}"
+            >
+              {{ todo.text }}
+            </button>
           </div>
         </div>
       </div>
       <div class="details-introduction">
-        <img
-          src="../assets/details/w-1.jpg"
-        />
-        <img
-          src="../assets/details/w-2.jpg"
-        />
-        <img
-          src="../assets/details/w-3.jpg"
-        />
-        <img
-          src="../assets/details/w-4.jpg"
-        />
-        <img
-          src="../assets/details/w-5.jpg"
-        />
-        <img
-          src="../assets/details/w-6.jpg"
-        />
-        <img
-          src="../assets/details/w-7.jpg"
-        />
-        <img
-          src="../assets/details/w-8.jpg"
-        />
-        <img
-          src="../assets/details/w-9.jpg"
-        />
-        <img
-          src="../assets/details/w-10.jpg"
-        />
-        <img
-          style="display: block"
-          src="../assets/details/w-11.jpg"
-        />
+        <img src="../assets/details/w-1.jpg" />
+        <img src="../assets/details/w-2.jpg" />
+        <img src="../assets/details/w-3.jpg" />
+        <img src="../assets/details/w-4.jpg" />
+        <img src="../assets/details/w-5.jpg" />
+        <img src="../assets/details/w-6.jpg" />
+        <img src="../assets/details/w-7.jpg" />
+        <img src="../assets/details/w-8.jpg" />
+        <img src="../assets/details/w-9.jpg" />
+        <img src="../assets/details/w-10.jpg" />
+        <img style="display: block" src="../assets/details/w-11.jpg" />
         <p style="text-align: center">
           <font color="#999999" size="1"
             >以上图片仅供参考，请以收到实物为准。</font
@@ -207,9 +183,8 @@
         </div>
       </div>
     </div>
-      <a id="top" href="#"></a>
-    <a id="webIm" href="">
-      <span>在线客服</span></a>
+    <a id="top" href="#"></a>
+    <a id="webIm" href=""> <span>在线客服</span></a>
   </div>
 </template>
 <style scoped>
@@ -308,38 +283,32 @@ ul {
   padding-right: 10px;
 }
 .details-size-extra {
+  margin-bottom: 30px;
+}
+.details-size-extra ul {
   display: flex;
-  margin: 0;
 }
-.details-size-extra dt {
-  float: left;
-  height: 30px;
-  width: 50px;
-  line-height: 50px;
-}
-.details-size-extra dd {
-  width: 450px;
-  float: left;
-  line-height: 30px;
-  margin-left: 0;
-}
-.details-size-extra dd ul li {
-  float: left;
-  min-width: 60px;
-  height: 30px;
-  margin-left: 15px;
-  text-align: center;
-  color: #7a5844;
-  margin-bottom: 25px;
-  cursor: pointer;
-}
-.details-size-extra dd ul li a {
-  display: block;
-  height: 28px;
-  border: 1px solid #e7e0dd;
-  position: relative;
-  padding: 0 5px;
+
+.changestyle {
   border-color: #684029;
+}
+.itemContent li {
+  display: flex;
+  flex-wrap: wrap;
+}
+.itemContent ul li {
+  padding: 0 10px;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  height: 28px;
+  line-height: 28px;
+}
+.itemLi {
+  border: 1px solid #e7e0dd;
+}
+.selectActive {
+  border: 1px solid #684029;
 }
 .details-button {
   width: 344px;
@@ -347,19 +316,24 @@ ul {
   font-size: 13px;
   display: flex;
 }
-.details-button button {
+.buttone {
   width: 167px;
   height: 30px;
   line-height: 30px;
-  background: #f4f4f4;
-  color: #7a5844;
+  background: #F4F4F4;
+  color: #7A5844;
   text-align: center;
   font-size: 13px;
   border: none;
   cursor: pointer;
   margin-right: 20px;
+  outline: none;
 }
-#top{
+.buttons {
+  background: #684029;
+  color: #fff;
+}
+#top {
   position: fixed;
   right: 25px;
   bottom: 120px;
@@ -405,3 +379,85 @@ ul {
   color: #73472e;
 }
 </style>
+<script>
+export default {
+  data() {
+    return {
+      imgs: [
+        require("../assets/details/d-1.jpg"),
+        require("../assets/details/d-1-1.jpg"),
+        require("../assets/details/d-1-2.jpg"),
+        require("../assets/details/d-1-3.jpg"),
+      ],
+      imgurl: require("../assets/details/d-1.jpg"),
+      showSelectSpec: "蔓生(有酒宽)/454g(1.0磅)",
+      price: "198",
+      subItemList: [
+        {
+          itemTitle: "规格",
+          itemContent: ["蔓生(有酒宽)", "蔓生(无酒款)"],
+        },
+        {
+          itemTitle: "商品规格",
+          itemContent: [
+            "454g(1.0磅)",
+            "908g(2.0磅)",
+            "1362g(3.0磅)",
+            "2270g(5.0磅)",
+          ],
+        },
+      ],
+      selectArr: [], // 存放被选中的值
+      subIndex: [],
+      current: 0,
+      todos: [{ text: "立即购买" }, { text: "加入购物车" }],
+    };
+  },
+  methods: {
+    change(imgs) {
+      this.imgurl = imgs;
+    },
+    changeselect(index) {
+      this.$refs.refbord.style.border = "1px solid #684029";
+    },
+    selectSpec(index) {
+      let t = this;
+      t.showSpec = true;
+    },
+    selectItem(res, index, enevt, resIndex) {
+      let t = this;
+      if (t.selectArr[index] !== res) {
+        t.selectArr[index] = res;
+        t.subIndex[index] = resIndex;
+      } else {
+        t.selectArr[index] = "";
+        t.subIndex[index] = -1; // 去掉选中的颜色
+      }
+      t.checkItem();
+    },
+    checkItem: function () {
+      var self = this;
+      var option = self.subItemList;
+      var result = []; // 定义数组存储被选中的值
+      console.log(JSON.parse(JSON.stringify(self.selectArr)));
+      for (let i in option) {
+        result[i] = self.selectArr[i] ? self.selectArr[i] : "";
+      }
+      for (let i in option) {
+        var last = result[i]; // 把选中的值存放到字符串last去
+        for (let k in option[i].item) {
+          result[i] = option[i].item[k].name; // 赋值，存在直接覆盖，不存在往里面添加name值
+          console.log("这里:", JSON.parse(JSON.stringify(result)));
+        }
+        result[i] = last; // 还原，目的是记录点下去那个值，避免下一次执行循环时避免被覆盖
+      }
+      self.$forceUpdate(); // 重绘
+      self.showSelectSpec = self.selectArr.join("/");
+      console.log(self.showSelectSpec);
+    },
+    addClass:function(index){
+                this.current=index;
+            }
+  },
+};
+</script>
