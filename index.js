@@ -6,7 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 //加载mysql模块
 const mysql = require('mysql');
-const { Console } = require('console');
+// const { Console } = require('console');
 //引入Mysql连接池模块
 const pool = mysql.createPool({
   //数据库服务器的地址
@@ -26,6 +26,7 @@ const pool = mysql.createPool({
 });
 //引入MD5
 const md = require('md5');
+const { userInfo } = require('os');
 //创建web服务器实例
 const server = express();
 
@@ -44,16 +45,23 @@ server.post('/login', (req, res) => {
   //获取用户名和密码
   let uname = req.body.uname;
   let upwd = req.body.upwd;
+  console.log(uname);
+  console.log(upwd);
   //以用户名和密码为条件进行查找
-  let sql = 'SELECT * FROM cake_perfect WHERE uname=? AND upwd=MD5(?)';
-  pool.query(sql,[uname,upwd],(error,results)=> {
-    if(error)throw error;
-    if(results.length == 0){
-      res.send({ message:'登录失败',code:0});
+  let sql = 'SELECT * FROM tb_user WHERE uname=? AND upwd=?';
+  pool.query(sql,[uname,upwd], (error, results) => {
+    console.log(results);
+    if (error) throw error;
+    if (results.length == 0) {
+      res.send({ message: '登录失败', code: 0 });
     } else {
-      res.send({message:'登录成功',code:1});
+      res.send({ message: '登录成功', code: 1 ,userInfo:results});
+    //   // console.log(userInfo);
+    //   // console.log(results);
     }
+    // res.send('1');
   });
+  
 });
 
 //指定web服务器监听的端口
