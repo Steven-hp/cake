@@ -4,18 +4,18 @@
     <div class="proListFilter">
       <dl>
         <dt>分类：</dt>
-        <dd><a href="">全部分类</a></dd>
+        <dd><a  @click="quanbu()">全部分类</a></dd>
         <dd>
-          <a href="">蛋糕</a>
+          <a  @click="dangao()">蛋糕</a>
         </dd>
-        <dd><a href="">冰淇淋</a></dd>
+        <dd><a  @click="bingjiling()">冰淇淋</a></dd>
         <dd>
-          <a href="">咖啡下午茶</a>
+          <a  @click="xiawucha()">咖啡下午茶</a>
         </dd>
-        <dd><a href="">常温蛋糕</a></dd>
-        <dd><a href="">设计师礼品</a></dd>
+        <dd><a >常温蛋糕</a></dd>
+        <dd><a >设计师礼品</a></dd>
         <dd>
-          <a href="">面包</a>
+          <a  @click="mianbao()">面包</a>
         </dd>
       </dl>
       <!-- 口味 -->
@@ -149,11 +149,13 @@ export default {
       products: [],
     };
   },
-  mounted() {
+  methods:{
+    quanbu(){
+      this.products = [];
     //修改busy变量的值
       this.busy=false;
     //通过axios工具向web服务器发送请求以获取文炸房数据
-       this.axios.get("/products").then((res)=>{
+       this.axios.get("/products?pro_tid=" + '1 || 2 || 3 || 4').then((res)=>{
       //获取服务器返回的数据 -- 数组
         let data = res.data.results;
         //数组的遍历,此时的item代表的是组成数组的每一个object
@@ -172,6 +174,107 @@ export default {
         //修改busy变量的值
         this.busy = false;
       }) 
-  }
-};
+    },
+    dangao(){
+      this.products = [];
+      //修改busy变量的值
+      this.busy=false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+       this.axios.get('/products?pro_tid=' + 1).then((res)=>{
+      //获取服务器返回的数据 -- 数组
+        let data = res.data.results;
+        //数组的遍历,此时的item代表的是组成数组的每一个object
+        //每一个object都包含id,subject,description及image属性
+        data.forEach((item) => {
+          //在文章的图片不为空的情况下才动态加载
+          if (item.pro_imgs_url != null) {
+            //属性重新赋值
+            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
+          }
+          //现在在无论是否图片为空都添加到以articles数组中了
+          this.products.push(item);
+        });
+        //关闭加载提示框
+        //this.$indicator.close();
+        //修改busy变量的值
+        this.busy = false;
+      });
+    },
+    mianbao(){
+      this.products = [];
+      //修改busy变量的值
+      this.busy=false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+       this.axios.get('/products?pro_tid=' + '2').then((res)=>{
+      //获取服务器返回的数据 -- 数组
+        let data = res.data.results;
+        //数组的遍历,此时的item代表的是组成数组的每一个object
+        //每一个object都包含id,subject,description及image属性
+        data.forEach((item) => {
+          //在文章的图片不为空的情况下才动态加载
+          if (item.pro_imgs_url != null) {
+            //属性重新赋值
+            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
+          }
+          //现在在无论是否图片为空都添加到以articles数组中了
+          this.products.push(item);
+        });
+        //关闭加载提示框
+        //this.$indicator.close();
+        //修改busy变量的值
+        this.busy = false;
+      });
+    },
+    bingjiling(){
+      this.products = [];
+      //修改busy变量的值
+      this.busy=false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+       this.axios.get('/products?pro_tid=' + '3').then((res)=>{
+      //获取服务器返回的数据 -- 数组
+        let data = res.data.results;
+        //数组的遍历,此时的item代表的是组成数组的每一个object
+        //每一个object都包含id,subject,description及image属性
+        data.forEach((item) => {
+          //在文章的图片不为空的情况下才动态加载
+          if (item.pro_imgs_url != null) {
+            //属性重新赋值
+            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
+          }
+          //现在在无论是否图片为空都添加到以articles数组中了
+          this.products.push(item);
+        });
+        //关闭加载提示框
+        //this.$indicator.close();
+        //修改busy变量的值
+        this.busy = false;
+      });
+    },
+    xiawucha(){
+      this.products = [];
+      //修改busy变量的值
+      this.busy=false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+       this.axios.get('/products?pro_tid=' + '4').then((res)=>{
+      //获取服务器返回的数据 -- 数组
+        let data = res.data.results;
+        //数组的遍历,此时的item代表的是组成数组的每一个object
+        //每一个object都包含id,subject,description及image属性
+        data.forEach((item) => {
+          //在文章的图片不为空的情况下才动态加载
+          if (item.pro_imgs_url != null) {
+            //属性重新赋值
+            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
+          }
+          //现在在无论是否图片为空都添加到以articles数组中了
+          this.products.push(item);
+        });
+        //关闭加载提示框
+        //this.$indicator.close();
+        //修改busy变量的值
+        this.busy = false;
+      });
+    },
+  },
+}
 </script>
