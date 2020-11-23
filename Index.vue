@@ -14,23 +14,23 @@
     <!-- 商品导航开始 -->
       <div class="index_nav">
           <ul>
-              <li><router-link to="#"><img src="../assets/picture/bc369fca5990e32df765d24e08221112.jpg" alt=""></router-link></li>
-              <li><router-link to="#"><img src="../assets/picture/9d85677ea56806bff908c431f7c764f7.jpg" alt=""></router-link></li>
-              <li><router-link to="#"><img src="../assets/picture/43a4c974312a2be97a1d0d6616c3ab23.jpg" alt=""></router-link></li>
-              <li><router-link to="#"><img src="../assets/picture/9e3f7fdd852d1b35f318076e3575412c.jpg" alt=""></router-link></li>
-              <li><router-link to="#"><img src="../assets/picture/37752f6805d166b02e011c3b5c3b4972.jpg" alt=""></router-link></li>
+              <li><a href="#F1"><img src="../assets/picture/bc369fca5990e32df765d24e08221112.jpg" alt=""></a></li>
+              <li><a href="#F2"><img src="../assets/picture/9d85677ea56806bff908c431f7c764f7.jpg" alt=""></a></li>
+              <li><a href="#F3"><img src="../assets/picture/43a4c974312a2be97a1d0d6616c3ab23.jpg" alt=""></a></li>
+              <li><a href="#F4"><img src="../assets/picture/9e3f7fdd852d1b35f318076e3575412c.jpg" alt=""></a></li>
+              <li><a href="#F5"><img src="../assets/picture/37752f6805d166b02e011c3b5c3b4972.jpg" alt=""></a></li>
           </ul>
       </div>
     <!-- 商品导航结束 -->
-    <!-- 展示楼层开始 -->
-      <div class="index_figure" v-for="(item,index) of carousel" :key="index">
-        <span class="index_word1">{{item.onSale_time}}</span><span class="index_word2">/</span><span class="index_word2">专区</span>
+    <!-- 展示楼层1F开始 -->
+      <div class="index_figure" id="F1">
+        <span class="index_word1">新品</span><span class="index_word2">/</span><span class="index_word2">专区</span>
         <div>
-          <router-link to="#"><img :src="item.index_onSale_url" alt=""></router-link>
+          <router-link to="#"><img src="../assets/figure/83db96358514ac6ecade4f142c2c5750.jpg" alt=""></router-link>
         </div>
         <!-- 商品展示 -->
         <div class="products_width">
-          <div class="index_products" v-for="(item1,index1) of products" :key="index1">
+          <div class="index_products" v-for="(item1,index1) of products1" :key="index1">
             <div>
               <router-link to="#">
               <img :src="item1.pro_imgs_url" alt="">
@@ -40,11 +40,104 @@
               </router-link>
             <!-- 商品标签 -->
             <div class="tag_list">
-              <router-link to="#">新品></router-link>
+              <router-link to="#">{{item1.pro_label}}></router-link>
             </div>
               <div class="index_price">
                 <!-- 商品价格 -->
-                <div>{{item1.pro_price}}</div>
+                <div>¥{{item1.pro_price.toFixed(2)}}/908g(1.0磅)</div>
+                <router-link to="a">加入购物车</router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 商品展示结束 -->
+      </div>
+    <!-- 展示楼层结束 -->
+    <!-- 展示楼层2F开始 -->
+      <div class="index_figure" id="F2">
+        <span class="index_word1">生日</span><span class="index_word2">/</span><span class="index_word2">专区</span>
+        <div>
+          <router-link to="#"><img src="../assets/figure/84f0375298ea7fe876ae1447c2911400.jpg" alt=""></router-link>
+        </div>
+        <!-- 商品展示 -->
+        <div class="products_width">
+          <div class="index_products" v-for="(item2,index2) of products2" :key="index2">
+            <div>
+              <router-link to="#">
+              <img :src="item2.pro_imgs_url" alt="">
+              <!-- 商品名称和商品描述 -->
+              <p>{{item2.pro_name}}</p>
+              <p>{{item2.pro_desc}}</p>
+              </router-link>
+            <!-- 商品标签 -->
+            <div class="tag_list">
+              <router-link to="#">{{item2.pro_label}}></router-link>
+            </div>
+              <div class="index_price">
+                <!-- 商品价格 -->
+                <div>¥{{item2.pro_price.toFixed(2)}}/908g(1.0磅)</div>
+                <router-link to="a">加入购物车</router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 商品展示结束 -->
+      </div>
+    <!-- 展示楼层结束 -->
+    <!-- 展示楼层3F开始 -->
+      <div class="index_figure" id="F3">
+        <span class="index_word1">儿童</span><span class="index_word2">/</span><span class="index_word2">专区</span>
+        <div>
+          <router-link to="#"><img src="../assets/figure/a85037c288546b3c691192dfad2bb16a.jpg" alt=""></router-link>
+        </div>
+        <!-- 商品展示 -->
+        <div class="products_width">
+          <div class="index_products" v-for="(item3,index3) of products3" :key="index3">
+            <div>
+              <router-link to="#">
+              <img :src="item3.pro_imgs_url" alt="">
+              <!-- 商品名称和商品描述 -->
+              <p>{{item3.pro_name}}</p>
+              <p>{{item3.pro_desc}}</p>
+              </router-link>
+            <!-- 商品标签 -->
+            <div class="tag_list">
+              <router-link to="#">{{item3.pro_label}}></router-link>
+            </div>
+              <div class="index_price">
+                <!-- 商品价格 -->
+                <div>¥{{item3.pro_price.toFixed(2)}}/908g(1.0磅)</div>
+                <router-link to="a">加入购物车</router-link>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 商品展示结束 -->
+      </div>
+    <!-- 展示楼层结束 -->
+    <!-- 展示楼层4F开始 -->
+      <div class="index_figure" id="F4">
+        <span class="index_word1">聚会</span><span class="index_word2">/</span><span class="index_word2">专区</span>
+        <div>
+          <router-link to="#"><img src="../assets/figure/4f5fdcf4d2b26b0400372f90b8fac191.jpg" alt=""></router-link>
+        </div>
+        <!-- 商品展示 -->
+        <div class="products_width">
+          <div class="index_products" v-for="(item4,index4) of products4" :key="index4">
+            <div>
+              <router-link to="#">
+              <img :src="item4.pro_imgs_url" alt="">
+              <!-- 商品名称和商品描述 -->
+              <p>{{item4.pro_name}}</p>
+              <p>{{item4.pro_desc}}</p>
+              </router-link>
+            <!-- 商品标签 -->
+            <div class="tag_list">
+              <router-link to="#">{{item4.pro_label}}></router-link>
+            </div>
+              <div class="index_price">
+                <!-- 商品价格 -->
+                <div>¥{{item4.pro_price.toFixed(2)}}/908g(1.0磅)</div>
                 <router-link to="a">加入购物车</router-link>
               </div>
             </div>
@@ -54,7 +147,7 @@
       </div>
     <!-- 展示楼层结束 -->
     <!-- 活动专区开始 -->
-      <div class="index_activity">
+      <div class="index_activity" id="F5">
         <span class="index_word1">活动门</span><span class="index_word2">/</span><span class="index_word2">是被吸引了吧</span>
         <div>
           <router-link to="#"><img src="../assets/picture/810af7fb1f079477c8aec960d11fa4df.jpg" alt=""></router-link>
@@ -98,27 +191,57 @@ export default {
     return{
         // 轮播图数组
       carousel:[],
-      products:[]
+      products1:[],
+      products2:[],
+      products3:[],
+      products4:[]
     }
   },
   mounted(){
+    // 轮播图
     this.axios.get("/").then(res=>{
       let data=res.data.results;
       data.forEach(item=>{
         // 轮播图路径
         item.index_carousel_url=require("../assets/carousel/"+item.index_carousel_url);
-        // 插图路径
-        item.index_onSale_url=require("../assets/figure/"+item.index_onSale_url);
         // 推入轮播图数组
         this.carousel.push(item);
       })
     });
-    this.axios.get("/products").then(res=>{
+    // 1F商品
+    this.axios.get("/products1").then(res=>{
       let data=res.data.results;
       console.log(data);
       data.forEach(item=>{
         item.pro_imgs_url=require("../assets/list/"+item.pro_imgs_url);
-        this.products.push(item);
+        this.products1.push(item);
+      })
+    });
+    // 2F商品
+    this.axios.get("/products2").then(res=>{
+      let data=res.data.results;
+      console.log(data);
+      data.forEach(item=>{
+        item.pro_imgs_url=require("../assets/list/"+item.pro_imgs_url);
+        this.products2.push(item);
+      })
+    });
+    // 3F商品
+    this.axios.get("/products3").then(res=>{
+      let data=res.data.results;
+      console.log(data);
+      data.forEach(item=>{
+        item.pro_imgs_url=require("../assets/list/"+item.pro_imgs_url);
+        this.products3.push(item);
+      })
+    });
+    // 4F商品
+    this.axios.get("/products4").then(res=>{
+      let data=res.data.results;
+      console.log(data);
+      data.forEach(item=>{
+        item.pro_imgs_url=require("../assets/list/"+item.pro_imgs_url);
+        this.products4.push(item);
       })
     });
   }

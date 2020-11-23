@@ -28,7 +28,7 @@ const server=express();
 
 // 将cors作为Server的中间件
 server.use(cors({
-    origin:["http://localhost:8080","http://127.0.0.1:8080"]
+    origin:["http://localhost:8081","http://127.0.0.1:8081"]
 }));
 
 //将body-parser作为Server的中间件 
@@ -51,21 +51,72 @@ server.get("/order",(req,res)=>{
 // 获取首页轮播图片
 // 获取专区名称，专区插图
 server.get("/",(req,res)=>{
-    let sql="SELECT index_carousel_url,onSale_time,index_onSale_url FROM tb_index_product";
+    let sql="SELECT index_carousel_url,onSale_time,index_onSale_url,index_news FROM tb_index_product";
     pool.query(sql,(error,results)=>{
         if(error) throw error;
         res.send({message:"获取成功",code:1,results:results})
     })
 })
 //获取商品信息的接口
-// server.get('/products',(req,res)=>{
-//     //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
-//     let sql = 'SELECT id,pro_name,pro_title,pro_price,pro_imgs_url,pro_desc FROM tb_products';
-//     pool.query(sql,(error,results)=>{
-//         if(error) throw error;
-//         res.send({message:'查询成功',code:1,results:results})
-//         console.log(results);
-//     });
-// });
+// 1F
+server.get('/products1',(req,res)=>{
+    // //存储分页显示的记录数量
+    // let pagesize = 4;
+    // //声明总页数变量
+    // let pagecount;
+    // // 根据page参数值并结合SELECT...LIMIT子句的标准计算公式来计算offset参数值
+    // let offset = (page - 1) * pagesize;
+    //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+    let sql = "SELECT id,pro_name,pro_title,pro_price,pro_imgs_url,pro_desc,pro_label FROM tb_products WHERE pro_label='新品'  LIMIT 0,4";
+    pool.query(sql,(error,results)=>{
+        if(error) throw error;
+        res.send({message:'查询成功',code:1,results:results})
+    });
+});
+// 2F
+server.get('/products2',(req,res)=>{
+    // //存储分页显示的记录数量
+    // let pagesize = 4;
+    // //声明总页数变量
+    // let pagecount;
+    // // 根据page参数值并结合SELECT...LIMIT子句的标准计算公式来计算offset参数值
+    // let offset = (page - 1) * pagesize;
+    //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+    let sql = "SELECT id,pro_name,pro_title,pro_price,pro_imgs_url,pro_desc,pro_label FROM tb_products WHERE pro_label='生日'  LIMIT 0,4";
+    pool.query(sql,(error,results)=>{
+        if(error) throw error;
+        res.send({message:'查询成功',code:1,results:results})
+    });
+});
+// 3F
+server.get('/products3',(req,res)=>{
+    // //存储分页显示的记录数量
+    // let pagesize = 4;
+    // //声明总页数变量
+    // let pagecount;
+    // // 根据page参数值并结合SELECT...LIMIT子句的标准计算公式来计算offset参数值
+    // let offset = (page - 1) * pagesize;
+    //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+    let sql = "SELECT id,pro_name,pro_title,pro_price,pro_imgs_url,pro_desc,pro_label FROM tb_products WHERE pro_label='儿童'  LIMIT 0,4";
+    pool.query(sql,(error,results)=>{
+        if(error) throw error;
+        res.send({message:'查询成功',code:1,results:results})
+    });
+});
+// 4F
+server.get('/products4',(req,res)=>{
+    // //存储分页显示的记录数量
+    // let pagesize = 4;
+    // //声明总页数变量
+    // let pagecount;
+    // // 根据page参数值并结合SELECT...LIMIT子句的标准计算公式来计算offset参数值
+    // let offset = (page - 1) * pagesize;
+    //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+    let sql = "SELECT id,pro_name,pro_title,pro_price,pro_imgs_url,pro_desc,pro_label FROM tb_products WHERE pro_label='聚会'  LIMIT 0,4";
+    pool.query(sql,(error,results)=>{
+        if(error) throw error;
+        res.send({message:'查询成功',code:1,results:results})
+    });
+});
 // 创建端口
 server.listen(3000);
