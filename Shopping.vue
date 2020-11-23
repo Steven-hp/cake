@@ -47,66 +47,62 @@
         <!-- 购物车标题名称结束 -->
         <!-- 购物车商品详细信息开始 -->
         <div class="details">
-          <!-- 详情容器开始  图片、名称 -->
-          <div style="cont">
-            <table class="tab-list">
-              <tr>
-                <td style="width: 6% "></td>
-                <td style="margin: 0 auto; ">
-                  <img class="pg" src="https://mall.christine.com.cn/public/images/b4/ec/e3/4ea6c159461336ad9a767a4e45e02b55ca7f3adf.jpg?1548057230#h" alt="">
-                </td>
-                <td class="title">
-                  <div>
-                    <el-badge value="new" class="item">仲夏夜之梦
+          <!-- 详情容器开始   -->
+          <div class="cont" style="width:96%;">
+            <el-main v-for="good in goods" :label="good.name" :key="good.id">
+              <div style=" height: 100px; margin: 0 auto;">
+                <!-- 商品图片 -->
+                <span class="title_g" style="margin: 0 90px;">
+                  <el-image class="pg" :src="good.url" alt=""></el-image>
+                </span>
+                <!-- 商品名称、尺寸 -->
+                <div class="title_g" style="margin: 0 210px; margin-top:-105px">
+                  <p style="width:200px" >
+                    <el-badge value="new" class="item">{{good.title}}
                     </el-badge>
-                  </div>
-                  <div>尺寸：6英寸</div>
-                </td>
-              </tr>
-            </table>
-            <!-- 分割线 -->
-            <el-divider></el-divider>
-            <table class="tab-list">
-              <tr id="prc">
-                <td style="width: 6% "></td>
-                <td style="margin: 0 auto; ">
-                    <img class="pg" src="https://mall.christine.com.cn/public/images/74/15/3c/ee7b46ebf0ac4c9e337a4a73c4bd6513ff13b12f.jpg?1548237891#h" alt="">
-                </td>
-                <td class="title">
-                  <div>
-                    <el-badge value="new" class="item">萌萌熊
-                    </el-badge>
-                  </div>
-                  <div>尺寸：6英寸</div>
-                </td></tr>
-            </table>
-          </div>
-          <!-- 详情容器结束   图片、名称-->
-          <!-- 详情容器结束   单价、数量、金额-->
-          <div style="cont1; width: width: 500px;  margin-top:-410px">
-            <table  class="tab-right;">
-              <el-main v-for="good in goods" :label="good.name" :key="good.id">
-                <div style="width:800px; margin-left: 480px; margin-top:120px">
-                  <span style="margin-right:200px;display:inline-block">{{good.price}} 元</span>
-                  <span style="margin-right:190px;display:inline-block"><el-input-number v-model="good.num" @change="handleChangeNum(good.id)" value="1" :min="1" size="small"></el-input-number></span>
-                  <span style="margin-right:-10px;color:red"> {{good.OnePrice}}元</span>
-                  <el-popconfirm  title="确定删除该商品吗？">
-                    <el-button style="margin-left: 60px " slot="reference" icon="el-icon-close" size="mini" circle></el-button>
-                  </el-popconfirm>
+                  </p>
+                  <p class="">{{good.size}}</p>
                 </div>
-              </el-main>
-            </table>
+                <!-- 商品单价 -->
+                <span class="prc_blo" style="margin: -25px auto;  margin-top: -60px; margin-left: 520px;" >{{good.price}} 元</span>
+                <!-- 商品数量 -->
+                <span class="prc_blo" style="padding-left: 760px;">
+                    <el-input-number v-model="good.num" @change="handleChangeNum(good.num)"  :min="0" size="small"></el-input-number>
+                </span>
+                <!-- 商品应支付金额 -->
+                <span class="prc_blo" style="margin-left: 1080px; margin-top:-25px; color:red"> {{good.OnePrice}}元</span>
+                <!-- 删除商品 -->
+                <!-- <el-popconfirm  class="prc_blo" title="确定删除该商品吗？">
+                  <el-button style="margin-left: 60px " slot="reference" icon="el-icon-close" size="mini" circle></el-button>
+                </el-popconfirm> -->
+                <div class="prc_blo" style="margin:0 1180px ">
+                  <el-popover
+                    placement="top"
+                    width="160"
+                    v-model="visible"
+                   >
+                    <p>确定删除该商品吗？</p>
+                    <div style="text-align: right; margin: 0">
+                      <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                      <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
+                    </div>
+                    <el-button icon="el-icon-close" size="mini" slot="reference" circle></el-button>
+                  </el-popover>
+                </div>
+              </div>
+              <el-divider></el-divider>
+            </el-main>
           </div>
-          <!-- 详情容器结束   单价、数量、金额-->
+          <!-- 详情容器结束   -->
         </div>
         <!-- 购物车商品详细信息结束 -->
         <!-- 结算商品--开始 -->
         <div class="details"  style="display: flex; height: 220px;">
           <!-- 全部删除 -->
             <div class="title" style="margin:40px; width: 300px; ">
-              <el-button plain style="cbut" >
+              <el-button plain class="cbut" >
               <i class="el-icon-delete"></i>
-              <span style="padding-left:15px">全部删除</span>
+              <span style="padding-left:10px">全部删除</span>
               </el-button>
             </div>
             <!-- 下单结算 -->
@@ -141,30 +137,44 @@
 export default {
     data() {
         return {
-          num:1,
+          visible: false,
+          // num:1,
              goods: [
                 {
                     id: 10,
-                    price: 188
+                    url:"https://mall.christine.com.cn/public/images/b4/ec/e3/4ea6c159461336ad9a767a4e45e02b55ca7f3adf.jpg?1548057230#h",
+                    title:"萌萌熊",
+                    size:"尺寸：6英寸",
+                    price: 188,
+                    num:0
                 },
                 {
                     id: 11,
-                    price: 188
+                    url:"https://mall.christine.com.cn/public/images/74/15/3c/ee7b46ebf0ac4c9e337a4a73c4bd6513ff13b12f.jpg?1548237891#h",
+                    title:"萌萌熊",
+                    size:"尺寸：6英寸",
+                    price: 188,
+                    num:1
                 },
                 
             ],
             allPrice: 0
+          
         };
     },
      methods: {
       //  单价
       handleChangeNum(val) {
-            this.goods.filter((it, id) => {
-                if (it.id == val) {
-                  // let num = it.num
-                    it.OnePrice = it.num * it.price;
-                }
+            this.goods.filter((it, num) => {
+                // if (it.id == val) { 
+                //   // let num = it.num
+                //     it.OnePrice = it.num * it.price;
+                // }
+                it.OnePrice = it.num * it.price;
+
             });
+            console.log(val,typeof val);
+            // OnePrice = good.ume * good.price
             this.getAllPrice();
         },
         // 总金额
@@ -172,9 +182,10 @@ export default {
             //获取总价方法封装
             let money = 0;
             this.goods.filter((it, id) => {
-                if (it.OnePrice) {
-                    money += it.OnePrice;
-                }
+                // if (it.OnePrice) {
+                //     money += it.OnePrice;
+                // }
+                money += it.OnePrice;
             });
             this.allPrice = money;
         },
@@ -187,9 +198,7 @@ export default {
 </script>
 
 <style>
-/* .el-col {
-    border-radius: 4px;
-  } */
+
 #shopping{
     width: 85%;
     margin: 0 auto;
@@ -202,7 +211,8 @@ export default {
 .trunk{
     margin: 0 auto;
     /* padding: 80px 50px; */
-
+    width: 80px;
+    height: 80px;
 }
 .trunk1{
     margin: 0 auto;
@@ -222,34 +232,6 @@ export default {
   border: 0.5px solid #ccc;
   background-color: #f7f8f8;
 }
-.item{
-  margin-top: 20px;
-  margin-right: 70px;
-}
-.tab tr{
-  height: 60px;
-  text-align: center;
-  vertical-align: middle;
-}
-.cont{
-  position: absolute;
-}
-.cont1{
-  /* position: fixed; */
-  position: absolute;
-  margin-top: 50px;
-  width: 600px;
-}
-.tab-list{
-  padding: 25px 0 ;
-  width: 400px;
-}
-.tab-list td{
-  width: 50%;
-}
-.tab-right{
-  z-index: 100;
-}
 .details{
   position: relative;
   margin: 20px auto;
@@ -258,15 +240,25 @@ export default {
   height: 330px;
   border: 0.5px solid #ccc;
 }
-/* .teb tr td{
+.title_g{
+  display: block;
+  width: 150px;
+  color: #791a1e;
   text-align: left;
-  display: flex;
-  float: right;
-} */
+  
+  /* display: flex;
+  justify-content: flex-start; */
+}
 .pg{
-  padding-right: 10px;
+  display: block;
+  padding-left: 10px;
   width: 80px;
   height: 80px;
+}
+.prc_blo{
+  display: block;
+  margin: -25px 10px;
+  width: 100px;
 }
 #pr-right{
   margin-left: 520px;
@@ -274,9 +266,11 @@ export default {
   width: 320px;
   text-align: right;
 }
-.cbut{
+/* .cbut{
+  display: flex;
   color: #791a1e;
-}
+  justify-content: space-between;  //flex-start;
+} */
 .but{
   display: block;
   width: 100%;
