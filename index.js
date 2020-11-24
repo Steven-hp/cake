@@ -4,14 +4,16 @@ import Home from '../views/Home.vue'
 
 import Shopping from '../views/Shopping.vue'
 import Empty from '../views/Empty.vue'
-
-
+import Mea from '../views/Mea.vue'
 
 
 Vue.use(VueRouter)
 
 const routes = [
-  
+  {
+    path: '/mea',
+    component: Mea
+  },
   {
     path: '/empty',
     component: Empty

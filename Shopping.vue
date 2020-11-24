@@ -37,7 +37,7 @@
               <tr>
                 <th style="width: 32%">商品</th>
                 <th style="width: 20%">单价</th>
-                <th style="width: 20%">数量</th>
+                <th style="width: 20%">购买数量</th>
                 <th style="width: 28%">金额</th>
                 <th></th>
               </tr>
@@ -48,49 +48,38 @@
         <!-- 购物车商品详细信息开始 -->
         <div class="details">
           <!-- 详情容器开始   -->
-          <div class="cont" style="width:96%;">
+          <div>
             <el-main v-for="good in goods" :label="good.name" :key="good.id">
-              <div style=" height: 100px; margin: 0 auto;">
+              <div class="goods">
                 <!-- 商品图片 -->
-                <span class="title_g" style="margin: 0 90px;">
-                  <el-image class="pg" :src="good.url" alt=""></el-image>
-                </span>
+                <div class="pg">
+                  <img class="pg_img" :src="good.url" alt=""/>
+                </div>
                 <!-- 商品名称、尺寸 -->
                 <div class="title_g" style="margin: 0 210px; margin-top:-105px">
                   <p style="width:200px" >
                     <el-badge value="new" class="item">{{good.title}}
                     </el-badge>
                   </p>
-                  <p class="">{{good.size}}</p>
+                  <p style="width:200px">{{good.size}}</p>
                 </div>
                 <!-- 商品单价 -->
-                <span class="prc_blo" style="margin: -25px auto;  margin-top: -60px; margin-left: 520px;" >{{good.price}} 元</span>
+                <span class="prc_blo" style="margin: -25px auto;  margin-top: -60px; margin-left: 500px;" >{{good.price}} 元</span>
                 <!-- 商品数量 -->
-                <span class="prc_blo" style="padding-left: 760px;">
+                <span class="prc_blo" style="padding-left: 720px;">
                     <el-input-number v-model="good.num" @change="handleChangeNum(good.num)"  :min="0" size="small"></el-input-number>
                 </span>
                 <!-- 商品应支付金额 -->
-                <span class="prc_blo" style="margin-left: 1080px; margin-top:-25px; color:red"> {{good.OnePrice}}元</span>
+                <span class="prc_blo" style="margin-left: 1040px; margin-top:-25px; color:red"> {{good.OnePrice}}元</span>
                 <!-- 删除商品 -->
                 <!-- <el-popconfirm  class="prc_blo" title="确定删除该商品吗？">
                   <el-button style="margin-left: 60px " slot="reference" icon="el-icon-close" size="mini" circle></el-button>
                 </el-popconfirm> -->
-                <div class="prc_blo" style="margin:0 1180px ">
-                  <el-popover
-                    placement="top"
-                    width="160"
-                    v-model="visible"
-                   >
-                    <p>确定删除该商品吗？</p>
-                    <div style="text-align: right; margin: 0">
-                      <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-                      <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
-                    </div>
-                    <el-button icon="el-icon-close" size="mini" slot="reference" circle></el-button>
-                  </el-popover>
+                <div class="prc_blo" style="margin:0 1100px ">
+                  <el-button icon="el-icon-close" size="mini"  circle></el-button>
                 </div>
               </div>
-              <el-divider></el-divider>
+              <!-- <el-divider></el-divider> -->
             </el-main>
           </div>
           <!-- 详情容器结束   -->
@@ -105,6 +94,7 @@
               <span style="padding-left:10px">全部删除</span>
               </el-button>
             </div>
+            
             <!-- 下单结算 -->
             <div id="pr-right"  class="title">
               <p>商品金额：￥  {{ allPrice.toFixed(2) }}</p>
@@ -112,6 +102,11 @@
               <el-divider></el-divider>
               <div class="money">合计：￥  {{ allPrice.toFixed(2) }}</div>
               <p class="but">下单结算</p>
+              <!-- <div style="border-bottom: 1px solid #faeac7;">购买数量:
+                <input type="button" value="-" id="jian" onclick="change(this,-1);"/>
+                <input id="text" type="text" size="1" value="1" readonly="readonly" />
+                <input type="button" value="+" id="add" onclick="change(this,1);"/> 
+              </div> -->
             </div>
         </div>
         <!-- 结算商品--结束 -->
@@ -210,7 +205,6 @@ export default {
 }
 .trunk{
     margin: 0 auto;
-    /* padding: 80px 50px; */
     width: 80px;
     height: 80px;
 }
@@ -223,35 +217,43 @@ export default {
   display: block;
   width: 100%;
   padding-left: 55px;
+  text-align: center;
 }
 .th{
   width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 10px 20px;
   height: 60px;
+  line-height: 60px;
   border: 0.5px solid #ccc;
   background-color: #f7f8f8;
 }
 .details{
-  position: relative;
+  /* position: relative; */
   margin: 20px auto;
   padding: 20px 20px;
   width: 100%;
-  height: 330px;
   border: 0.5px solid #ccc;
 }
 .title_g{
-  display: block;
   width: 150px;
   color: #791a1e;
   text-align: left;
-  
-  /* display: flex;
-  justify-content: flex-start; */
+}
+.goods{
+  height: 110px; 
+  margin: 0 auto;
+  padding-bottom: 15px;
+  border-bottom: 0.1px solid #ccc;
 }
 .pg{
-  display: block;
-  padding-left: 10px;
+  margin: 0;
+  margin-left: 90px;
+  padding-bottom: 30px;
+  width: 80px;
+  height: 80px;
+}
+.pg_img{
   width: 80px;
   height: 80px;
 }
@@ -267,6 +269,7 @@ export default {
   text-align: right;
 }
 /* .cbut{
+  align:center;
   display: flex;
   color: #791a1e;
   justify-content: space-between;  //flex-start;
