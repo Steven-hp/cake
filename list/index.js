@@ -48,7 +48,25 @@ server.use(bodyParser.urlencoded({extended:false}));
         res.send({message:'查询成功',code:1,results:results})
     });
 });
-
+ //获取商品信息的接口
+ server.get('/productse',(req,res)=>{
+    //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+    let sql = 'SELECT pro_name,pro_price,pro_imgs_url,pro_tid FROM tb_products';
+    pool.query(sql,(error,results)=>{
+        if(error) throw error;
+        res.send({message:'查询成功',code:1,results:results})
+    });
+});
+ //获取商品口味的接口
+ server.get('/productd',(req,res)=>{
+    let pro_categories = req.query.pro_categories;
+    //SQL语句，查询自己所需要的信息数据如编号，名称，主题，如有需要自行添加
+    let sql = 'SELECT pro_name,pro_price,pro_imgs_url,pro_tid FROM tb_products where pro_tid=1 and pro_categories=?';
+    pool.query(sql,[pro_categories],(error,results)=>{
+        if(error) throw error;
+        res.send({message:'查询成功',code:1,results:results})
+    });
+});
 
 
 

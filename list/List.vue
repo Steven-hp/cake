@@ -2,46 +2,35 @@
   <div class="contentBox">
     <!-- 分类 -->
     <div class="proListFilter">
-      <dl>
-        <dt>分类：</dt>
-        <dd><a  @click="quanbu()">全部分类</a></dd>
-        <dd>
-          <a  @click="dangao()">蛋糕</a>
-        </dd>
-        <dd><a  @click="bingjiling()">冰淇淋</a></dd>
-        <dd>
-          <a  @click="xiawucha()">咖啡下午茶</a>
-        </dd>
-        <dd><a >常温蛋糕</a></dd>
-        <dd><a >设计师礼品</a></dd>
-        <dd>
-          <a  @click="mianbao()">面包</a>
-        </dd>
-      </dl>
-      <!-- 口味 -->
-      <dl>
-        <dt>口味：</dt>
-        <dd>
-          <a href="">全部口味</a>
-        </dd>
-        <dd><a href="">乳脂奶油</a></dd>
-        <dd><a href="">慕斯</a></dd>
-        <dd><a href="">乳酪</a></dd>
-        <dd><a href="">巧克力</a></dd>
-        <dd><a href="">坚果</a></dd>
-        <dd><a href="">水果</a></dd>
-        <dd><a href="">咖啡</a></dd>
-        <dd><a href="">冰淇淋</a></dd>
-        <dd><a href="">应季</a></dd>
-      </dl>
+      <span>分类：</span>
+      <ul class="dl" @click="quanbu">
+        <li value="0" @click="quanbus">全部分类</li>
+        <li value="1">蛋糕</li>
+        <li value="3">冰淇淋</li>
+        <li value="4">咖啡下午茶</li>
+        <li value="2">面包</li>
+      </ul>
     </div>
+      <!-- 口味 -->
+      <div class="proListFilters">
+      <span>口味：</span>
+      <ul class="dl" ref='box' @click="kouwei">
+        <li value="0" @click="kouweis">全部口味</li>
+        <li value="1">乳脂奶油</li>
+        <li value="2">慕斯</li>
+        <li value="3">乳酪</li>
+        <li value="4">巧克力</li>
+        <li value="5">坚果</li>
+        <li value="6">水果</li>
+      </ul>
+      </div>
     <!-- 商品列表 -->
     <div class="listPro">
       <!-- 单个商品 -->
       <div class="proListSu" v-for="(product, index) of products" :key="index">
         <!-- 图片 -->
         <a href="" v-if="product.pro_imgs_url !=null">
-          <img :src = "product.pro_imgs_url" />
+          <img v-lazy = "product.pro_imgs_url" />
         </a>
         <!-- 名称 -->
         <h3>{{ product.pro_name }}</h3>
@@ -76,18 +65,32 @@ a {
 .proListFilter {
   font-size: 13px;
   margin-top: 25px;
-  margin-bottom: 35px;
   width: 1200px;
   border-top: #f2f2f2 solid 1px;
+  overflow: hidden;
+  padding: 8px 0;
+  display: flex;
+  line-height: 50px;
+}
+.proListFilters {
+  font-size: 13px;
+  margin-bottom: 35px;
+  width: 1200px;
   border-bottom: #f2f2f2 solid 1px;
   overflow: hidden;
   padding: 8px 0;
-}
-dl {
   display: flex;
-  line-height: 50px;
-  overflow: hidden;
+  line-height: 25px;
+}
+.dl {
+  display: flex;
+  list-style: none;
+  margin: 0;
+}
+.dl li{
   height: 50px;
+  margin: 0 13px;
+  cursor:pointer;
 }
 .proListSu {
   width: 228px;
@@ -147,15 +150,51 @@ export default {
     return {
       //存储服务器返回商品信息的分类数据
       products: [],
+      busy: false,
     };
   },
-  methods:{
-    quanbu(){
-      this.products = [];
+  mounted(){
+    this.products = [];
     //修改busy变量的值
       this.busy=false;
     //通过axios工具向web服务器发送请求以获取文炸房数据
-       this.axios.get("/products?pro_tid=" + '1 || 2 || 3 || 4').then((res)=>{
+       this.axios.get("/productse").then((res)=>{
+      //获取服务器返回的数据 -- 数组
+        let data = res.data.results;
+        //数组的遍历,此时的item代表的是组成数组的每一个object
+        //每一个object都包含id,subject,description及image属性
+        data.forEach((item) => {
+          //在文章的图片不为空的情况下才动态加载
+          if (item.pro_imgs_url != null) {
+            //属性重新赋值
+            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
+          }
+          //现在在无论是否图片为空都添加到以articles数组中了
+          this.products.push(item);
+        });
+        //关闭加载提示框
+        //this.$indicator.close();
+        //修改busy变量的值
+        this.busy = false;
+      })
+  },
+  methods:{
+    quanbu(event){
+      this.products = [];
+      if((event.target.value == 2) || (event.target.value == 3) || (event.target.value == 4) ){
+        this.$refs.box.style.color = '#BBC1D2'
+      }else if(event.target.value == 1){
+        this.$refs.box.style.color = '#684029'
+      }else if(event.target.value == 0){
+        this.$refs.box.style.color = '#684029'
+        this.quanbus()
+      }
+      
+      let id = event.target.value;
+    //修改busy变量的值
+      this.busy=false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+       this.axios.get("/products?pro_tid=" + id).then((res)=>{
       //获取服务器返回的数据 -- 数组
         let data = res.data.results;
         //数组的遍历,此时的item代表的是组成数组的每一个object
@@ -175,12 +214,12 @@ export default {
         this.busy = false;
       }) 
     },
-    dangao(){
+    quanbus(){
       this.products = [];
       //修改busy变量的值
       this.busy=false;
     //通过axios工具向web服务器发送请求以获取文炸房数据
-       this.axios.get('/products?pro_tid=' + 1).then((res)=>{
+       this.axios.get("/productse").then((res)=>{
       //获取服务器返回的数据 -- 数组
         let data = res.data.results;
         //数组的遍历,此时的item代表的是组成数组的每一个object
@@ -198,14 +237,19 @@ export default {
         //this.$indicator.close();
         //修改busy变量的值
         this.busy = false;
-      });
+      })
     },
-    mianbao(){
+    kouwei(event){
       this.products = [];
-      //修改busy变量的值
+      if(event.target.value == 0){
+        this.kouweis()
+      }
+      
+      let id = event.target.value;
+    //修改busy变量的值
       this.busy=false;
     //通过axios工具向web服务器发送请求以获取文炸房数据
-       this.axios.get('/products?pro_tid=' + '2').then((res)=>{
+       this.axios.get("/productd?pro_categories=" + id).then((res)=>{
       //获取服务器返回的数据 -- 数组
         let data = res.data.results;
         //数组的遍历,此时的item代表的是组成数组的每一个object
@@ -223,14 +267,15 @@ export default {
         //this.$indicator.close();
         //修改busy变量的值
         this.busy = false;
-      });
+      }) 
     },
-    bingjiling(){
+    kouweis(){
       this.products = [];
-      //修改busy变量的值
+      let id = 1;
+    //修改busy变量的值
       this.busy=false;
     //通过axios工具向web服务器发送请求以获取文炸房数据
-       this.axios.get('/products?pro_tid=' + '3').then((res)=>{
+       this.axios.get("/products?pro_tid=" + id).then((res)=>{
       //获取服务器返回的数据 -- 数组
         let data = res.data.results;
         //数组的遍历,此时的item代表的是组成数组的每一个object
@@ -248,33 +293,8 @@ export default {
         //this.$indicator.close();
         //修改busy变量的值
         this.busy = false;
-      });
-    },
-    xiawucha(){
-      this.products = [];
-      //修改busy变量的值
-      this.busy=false;
-    //通过axios工具向web服务器发送请求以获取文炸房数据
-       this.axios.get('/products?pro_tid=' + '4').then((res)=>{
-      //获取服务器返回的数据 -- 数组
-        let data = res.data.results;
-        //数组的遍历,此时的item代表的是组成数组的每一个object
-        //每一个object都包含id,subject,description及image属性
-        data.forEach((item) => {
-          //在文章的图片不为空的情况下才动态加载
-          if (item.pro_imgs_url != null) {
-            //属性重新赋值
-            item.pro_imgs_url = require("../assets/list/" + item.pro_imgs_url);
-          }
-          //现在在无论是否图片为空都添加到以articles数组中了
-          this.products.push(item);
-        });
-        //关闭加载提示框
-        //this.$indicator.close();
-        //修改busy变量的值
-        this.busy = false;
-      });
-    },
+      }) 
+    }
   },
 }
 </script>
