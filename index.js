@@ -5,7 +5,7 @@ const cors = require("cors");
 //加载MYsql模块
 const mysql = require("mysql");
 // 
-const bodyparser=require("body-parser")
+const bodyparser = require("body-parser")
 //创建连接池
 const pool = mysql.createPool({
   host: '127.0.0.1',
@@ -18,7 +18,7 @@ const pool = mysql.createPool({
 })
 //创建web服务器实例
 const server = express();
-server.use(bodyparser.urlencoded({extended:false}))
+server.use(bodyparser.urlencoded({ extended: false }))
 //将cors作为server的中间件
 server.use(cors({
   origin: ['http://localhost:8080', 'http://127.0.0.1:8080']
@@ -28,7 +28,7 @@ server.use(cors({
 server.get('/adress', (req, res) => {
   //sql语句,根据物流信息表编号 获取用户的物流信息
   let sql = "SELECT receiver,is_default,cellphone,o_id FROM tb_adress_user WHERE id=?";
-  pool.query(sql, [1] , (error, results) => {
+  pool.query(sql, [1], (error, results) => {
     if (error) throw error;
     res.send({ message: "获取成功", code: 1, results: results });
     console.log(res);
@@ -46,24 +46,34 @@ server.get('/adress', (req, res) => {
 // })
 // 修改用户个人资料
 //修改用户
-	 //3.1.获取get的请求
-   server.post('/update',(req,res)=>{
-        let obj=req.body;
-        console.log(obj)
-    //3.4 执行SQL命令
-    //修改数据,将整个对象修改
-      pool.query('UPDATE tb_user SET uname=?,phone=? WHERE id=1',[obj.uname,obj.phone],(err,results)=>{
-      if(err) throw err;
-      //返回的是对象,如果对象下的affectedRows为0说明修改失败,否则修改成功
-      console.log(results);
-      if(results.affectedRows===0){
-        res.send({code: 0});
-      }else{
-        res.send({code: 1});
-      }
-      });
-      });
-
+//3.1.获取get的请求
+server.post('/update', (req, res) => {
+  let obj = req.body;
+  console.log(obj)
+  //3.4 执行SQL命令
+  //修改数据,将整个对象修改
+  pool.query('UPDATE tb_user SET uname=?,phone=? WHERE id=1', [obj.uname, obj.phone], (err, results) => {
+    if (err) throw err;
+    //返回的是对象,如果对象下的affectedRows为0说明修改失败,否则修改成功
+    console.log(results);
+    if (results.affectedRows === 0) {
+      res.send({ code: 0 });
+    } else {
+      res.send({ code: 1 });
+    }
+  });
+});
+// 添加地址
+server.post("/create",(req,res)=>{
+    let receiver=req.body.receiver;
+    let address=req.body.address;
+    let cellphone=req.body.cellphone;
+  console.log(address,cellphone,receiver)
+    pool.query("INSERT INTO tb_adress_user(receiver,address,cellphone) VALUES(?,?,?)",[receiver,address,cellphone],(err,results)=>{
+      if(err) throw err;
+      res.send({ message: "获取成功", code: 1, results: results });
+    })
+  })
 //指定web服务器监听的端口
 server.listen(3000);
 
