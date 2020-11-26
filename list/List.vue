@@ -29,9 +29,9 @@
       <!-- 单个商品 -->
       <div class="proListSu" v-for="(product, index) of products" :key="index">
         <!-- 图片 -->
-        <a href="" v-if="product.pro_imgs_url !=null">
-          <img v-lazy = "product.pro_imgs_url" />
-        </a>
+        <div v-if="product.pro_imgs_url !=null">
+          <img @click="details(product)" v-lazy = "product.pro_imgs_url" />
+        </div>
         <!-- 名称 -->
         <h3>{{ product.pro_name }}</h3>
         <!-- 价格 -->
@@ -41,9 +41,6 @@
           <a href="">新品 &gt;</a><a href="">当季推荐 &gt;</a>
         </div>
         <!-- 加入购物车 -->
-        <a href="" name="pro-list-addcart_1412" class="proListAddcart"
-          ><i></i>加入购物车</a
-        >
       </div>
     </div>
   </div>
@@ -294,6 +291,9 @@ export default {
         //修改busy变量的值
         this.busy = false;
       }) 
+    },
+    details(product){
+      this.$router.push({ path: `/details/${product.id}` });
     }
   },
 }

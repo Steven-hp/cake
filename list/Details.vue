@@ -18,7 +18,13 @@
               <img :src="item" alt="" />
             </li>
           </ul>
-          <h1 class="pro-details-title">Framboise Cake 蔓生</h1>
+          <h1
+            class="pro-details-title"
+            v-for="(product, index) of productsed"
+            :key="index"
+          >
+            {{ product.pro_name }}
+          </h1>
           <div class="pro-details-label">
             <a href="" target="_blank">新品 &gt;</a>
             <a href="" target="_blank">当季推荐 &gt;</a>
@@ -35,7 +41,8 @@
         <div class="details-content-right">
           <!-- 价格 -->
           <p class="details-price">
-            ¥<span @click="price">{{ price }}</span
+            <span v-for="(product, index) of productsed" :key="index"
+              >{{ product.pro_name }} ¥{{ product.pro_price }}</span
             >{{ showSelectSpec }}
           </p>
           <!-- 建议 -->
@@ -72,11 +79,17 @@
           </div>
           <!-- 购买按钮 -->
           <div class="details-button">
-            <button class="buttone"
-              v-for="(todo, index) in todos" :key="index" @click="addClass(index)" :class="{ buttons:index==current}"
+            <!-- <button
+              class="buttone"
+              v-for="(todo, index) in todos"
+              :key="index"
+              @click="addClass(index)"
+              :class="{ buttons: index == current }"
             >
               {{ todo.text }}
-            </button>
+            </button> -->
+            <button ref="goumai" @click="goumai()" class="buttone">立即购买</button>
+            <button ref="gouwuc" @click="gouwuc()" class="buttone">加入购物车</button>
           </div>
         </div>
       </div>
@@ -320,8 +333,8 @@ ul {
   width: 167px;
   height: 30px;
   line-height: 30px;
-  background: #F4F4F4;
-  color: #7A5844;
+  background: #f4f4f4;
+  color: #7a5844;
   text-align: center;
   font-size: 13px;
   border: none;
@@ -380,7 +393,9 @@ ul {
 }
 </style>
 <script>
+import LoginPop from '../components/LoginPop.vue';
 export default {
+  components: { LoginPop },
   data() {
     return {
       imgs: [
@@ -390,12 +405,12 @@ export default {
         require("../assets/details/d-1-3.jpg"),
       ],
       imgurl: require("../assets/details/d-1.jpg"),
-      showSelectSpec: "蔓生(有酒宽)/454g(1.0磅)",
+      showSelectSpec: "(有酒宽)/454g(1.0磅)",
       price: "198",
       subItemList: [
         {
           itemTitle: "规格",
-          itemContent: ["蔓生(有酒宽)", "蔓生(无酒款)"],
+          itemContent: ["(有酒宽)", "(无酒款)"],
         },
         {
           itemTitle: "商品规格",
@@ -411,12 +426,33 @@ export default {
       subIndex: [],
       current: 0,
       todos: [{ text: "立即购买" }, { text: "加入购物车" }],
+      productsed: [],
     };
   },
+  mounted() {
+    let id = this.$route.params.id;
+    this.busy = false;
+    //通过axios工具向web服务器发送请求以获取文炸房数据
+    this.axios.get("/productsed?id=" + id).then((res) => {
+      //获取服务器返回的数据 -- 数组
+      let data = res.data.results;
+      //数组的遍历,此时的item代表的是组成数组的每一个object
+      data.forEach((item) => {
+        //在文章的图片不为空的情况下才动态加载
+
+        //现在在无论是否图片为空都添加到以articles数组中了
+        this.productsed.push(item);
+      });
+      console.log(data);
+      this.busy = false;
+    });
+  },
   methods: {
+    //图片事件
     change(imgs) {
       this.imgurl = imgs;
     },
+    //控制选择框
     changeselect(index) {
       this.$refs.refbord.style.border = "1px solid #684029";
     },
@@ -455,9 +491,45 @@ export default {
       self.showSelectSpec = self.selectArr.join("/");
       console.log(self.showSelectSpec);
     },
-    addClass:function(index){
-                this.current=index;
-            }
-  },
+    addClass: function (index) {
+      this.current = index;
+      let id = this.$route.params.id;
+      let ge = this.selectArr;
+      // let login = document.getElementById('login')
+      // if(this.$store.state.isLogined==0){
+      //   login.style.display = "block";
+      // }else if(this.$store.state.isLogined==1){
+      //   this.$router.push({ path: `/shopping/${id}/${ge}` });
+      // }
+    },
+    goumai(){
+      let id = this.$route.params.id;
+      let ge = this.selectArr;
+      this.$refs.goumai.style.background = '#684029';
+      this.$refs.goumai.style.color = '#fff';
+      this.$refs.gouwuc.style.background = '#f4f4f4';
+      this.$refs.goumai.style.color = '#7a5844';
+      let login = document.getElementById('login')
+      if(this.$store.state.isLogined==0){
+        login.style.display = "block";
+      }else if(this.$store.state.isLogined==1){
+        this.$router.push({ path: `/shopping/${id}/${ge}` });
+      }
+    },
+    gouwuc(){
+      let id = this.$route.params.id;
+      let ge = this.selectArr;
+      this.$refs.gouwuc.style.background = '#684029';
+      this.$refs.goumai.style.color = '#fff';
+      this.$refs.goumai.style.background = '#f4f4f4';
+      this.$refs.goumai.style.color = '#7a5844';
+      let login = document.getElementById('login')
+      if(this.$store.state.isLogined==0){
+        login.style.display = "block";
+      }else if(this.$store.state.isLogined==1){
+        this.$router.push({ path: `/shopping/${id}/${ge}` });
+      }
+    }
+  }
 };
 </script>
